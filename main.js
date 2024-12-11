@@ -21,6 +21,15 @@ app.get('/users', async (req, res) => {
 // Creating new user
 app.post('/users', async (req, res) => {
     try {
+        if (!req.body.name || req.body.name.length < 3) {
+            return res.status(400).json('Name is required and should be minimum 3 symbols');
+        }
+        if (!req.body.email || !req.body.email.includes('@')) {
+            return res.status(400).json('Email is required');
+        }
+        if (!req.body.password || req.body.password.length < 8) {
+            return res.status(400).json('Password is required and should be minimum 8 symbols');
+        }
         const users = await read();
         const newUser = {
         id: users.length ? users [users.length - 1].id + 1 : 1,
@@ -42,6 +51,35 @@ app.get('/users/:userId', async (req, res) => {
         const users = await read();
         const user = users.find(user => user.id === Number(req.params.userId));
         res.json(user);
+    }
+    catch (e) {
+        res.status(500).json(e.message);
+    }
+});
+// Updating user by id
+app.put('/users/:userId', async (req, res) => {
+    try {
+        if (!req.body.name || req.body.name.length < 3) {
+            return res.status(400).json('Name is required and should be minimum 3 symbols');
+        }
+        if (!req.body.email || !req.body.email.includes('@')) {
+            return res.status(400).json('Email is required');
+        }
+        if (!req.body.password || req.body.password.length < 8) {
+            return res.status(400).json('Password is required and should be minimum 8 symbols');
+        }
+        const users = await read();
+        const index = users.findIndex(user => user.id === Number(req.params.userId));
+        if (index === -1) {
+            return res.status(404).json('User not found')
+        }
+        const user = users[index];
+        user.name = req.body.name;
+        user.email = req.body.email;
+        user.password = req.body.password;
+
+        await write(users);
+        res.status(201).json(user);
     }
     catch (e) {
         res.status(500).json(e.message);
