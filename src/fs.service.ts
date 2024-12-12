@@ -1,8 +1,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import {IUser} from "./interfaces/user.interface";
 
 const pathToFile = path.resolve(process.cwd(), 'DB', 'users.json');
-const read = async () => {
+const read = async (): Promise<IUser[]> => {
     try {
         const json = await fs.readFile(pathToFile, 'utf-8');
         return json ? JSON.parse(json) : [];
@@ -11,7 +12,7 @@ const read = async () => {
         console.log('Error: ', error.message);
     }
 };
- const write = async (users) => {
+ const write = async (users: IUser[]): Promise<void> => {
     try {
         await fs.writeFile(pathToFile, JSON.stringify(users, null, 2));
     }

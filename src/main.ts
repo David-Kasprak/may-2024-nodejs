@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // Reading users
-app.get('/users', async (req, res) => {
+app.get('/users', async (req, res): Promise<void> => {
     try {
         const users = await read();
         res.json(users);
@@ -20,7 +20,7 @@ app.get('/users', async (req, res) => {
 });
 // Creating new user
 // @ts-ignore
-app.post('/users', async (req: Request, res: Response) => {
+app.post('/users', async (req: Request, res: Response): Promise<void> => {
     try {
         if (!req.body.name || req.body.name.length < 3) {
             return res.status(400).json('Name is required and should be minimum 3 symbols');
@@ -47,7 +47,7 @@ app.post('/users', async (req: Request, res: Response) => {
     }
 });
 // Reading user by id
-app.get('/users/:userId', async (req: Request, res: Response) => {
+app.get('/users/:userId', async (req: Request, res: Response): Promise<void> => {
     try {
         const users = await read();
         const user = users.find(user => user.id === Number(req.params.userId));
@@ -59,7 +59,7 @@ app.get('/users/:userId', async (req: Request, res: Response) => {
 });
 // Updating user by id
 // @ts-ignore
-app.put('/users/:userId', async (req: Request, res: Response) => {
+app.put('/users/:userId', async (req: Request, res: Response): Promise<void> => {
     try {
         if (!req.body.name || req.body.name.length < 3) {
             return res.status(400).json('Name is required and should be minimum 3 symbols');
@@ -89,7 +89,7 @@ app.put('/users/:userId', async (req: Request, res: Response) => {
 });
 // Deleting user by id
 // @ts-ignore
-app.delete('/users/:userId', async (req: Request, res: Response) => {
+app.delete('/users/:userId', async (req: Request, res: Response): Promise<void> => {
     try {
         const users = await read();
         const index = users.findIndex(user => user.id === Number(req.params.userId));
