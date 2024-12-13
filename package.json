@@ -1,7 +1,8 @@
 {
   "name": "may-2024-nodejs",
   "version": "1.0.0",
-  "main": "src/main.ts",
+  "description": "",
+  "main": "src/main.js",
   "scripts": {
     "start:dev": "rimraf dist && tsc-watch --onSuccess \"npm run watch:server\"",
     "watch:server": "nodemon --exec ts-node src/main.ts",
@@ -11,7 +12,6 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^4.21.2"
