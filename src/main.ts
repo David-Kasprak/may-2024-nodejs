@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 
-import { read, write } from "./fs.service";
+import { read, write } from "./services/fs.service";
 
 dotenv.config();
 
