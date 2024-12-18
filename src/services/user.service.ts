@@ -11,6 +11,7 @@ class UserService {
     return await userRepository.getList();
   }
   public async create(dto: IUserCreateDto): Promise<IUser> {
+    await this.isEmailUnique(dto.email);
     if (!dto.name || dto.name.length < 3) {
       throw new ApiError(
         "Name is required and should be minimum 3 symbols",
@@ -48,6 +49,12 @@ class UserService {
       throw new ApiError("User not found", 404);
     }
     await userRepository.deleteById(userId);
+  }
+  private async isEmailUnique(email: string): Promise<void> {
+    const user = await userRepository.getByEmail(email);
+    if (user) {
+      throw new ApiError("Email is already in use", 409);
+    }
   }
 }
 

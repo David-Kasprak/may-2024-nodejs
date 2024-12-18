@@ -21,6 +21,9 @@ class UserRepository {
   public async deleteById(userId: string): Promise<void> {
     await User.deleteOne({ _id: userId });
   }
+  public async getByEmail(email: string): Promise<IUser> {
+    return await User.findOne({ email });
+  }
 }
 
 export const userRepository = new UserRepository();

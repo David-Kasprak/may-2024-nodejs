@@ -12,6 +12,7 @@ class UserController {
       next(e);
     }
   }
+
   public async create(req: Request, res: Response, next: NextFunction) {
     try {
       const dto = req.body as IUserCreateDto;
@@ -21,6 +22,7 @@ class UserController {
       next(e);
     }
   }
+
   public async getUserById(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = req.params.userId;
@@ -30,6 +32,7 @@ class UserController {
       next(e);
     }
   }
+
   public async updateUser(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = req.params.userId;
@@ -40,6 +43,7 @@ class UserController {
       next(e);
     }
   }
+
   public async deleteUser(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = req.params.userId;
