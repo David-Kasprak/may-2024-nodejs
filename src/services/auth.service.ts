@@ -26,6 +26,9 @@ class AuthService {
     dto: ILogin,
   ): Promise<{ user: IUser; tokens: ITokenPair }> {
     const user = await userRepository.getByEmail(dto.email);
+    if (!user) {
+      throw new ApiError("Incorrect email or password", 401);
+    }
     const isPasswordCorrect = await passwordService.comparePassword(
       dto.password,
       user.password,
