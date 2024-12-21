@@ -27,9 +27,9 @@ class AuthController {
 
   public async refresh(req: Request, res: Response, next: NextFunction) {
     try {
-      const tokenPayLoad = req.res.locals.tokenPayLoad as ITokenPayload;
+      const tokenPayload = req.res.locals.tokenPayload as ITokenPayload;
       const refreshToken = req.res.locals.refreshToken as string;
-      const result = await authService.refresh(tokenPayLoad, refreshToken);
+      const result = await authService.refresh(tokenPayload, refreshToken);
       res.status(201).json(result);
     } catch (e) {
       next(e);
