@@ -2,6 +2,7 @@ import { config } from "../configs/config";
 import { ActionTokenTypeEnum } from "../enums/action-token-type.enum";
 import { EmailTypeEnum } from "../enums/email-type.enum";
 import { ApiError } from "../errors/api.error";
+import { IVerifyToken } from "../interfaces/action-token.interface";
 import { ITokenPair, ITokenPayload } from "../interfaces/token.interface";
 import {
   IForgotPassword,
@@ -30,10 +31,19 @@ class AuthService {
       role: user.role,
     });
     await tokenRepository.create({ ...tokens, _userId: user._id });
+    const actionToken = tokenService.generateActionTokens(
+      { userId: user._id, role: user.role },
+      ActionTokenTypeEnum.FORGOT_PASSWORD,
+    );
+    await actionTokenRepository.create({
+      _userId: user._id,
+      token: actionToken,
+      type: ActionTokenTypeEnum.FORGOT_PASSWORD,
+    });
     await emailService.sendEmail(
       EmailTypeEnum.WELCOME,
       "kasprakdavid@gmail.com",
-      { name: user.name, frontUrl: config.frontUrl },
+      { name: user.name, frontUrl: config.frontUrl, actionToken },
     );
     return { user, tokens };
   }
@@ -144,6 +154,14 @@ class AuthService {
       actionTokenRepository.deleteOneByParams({ token: dto.token }),
       tokenRepository.deleteAllByParams({ _userId: payload.userId }),
     ]);
+  }
+
+  public async verify(
+    dto: IVerifyToken,
+    tokenPayload: ITokenPayload,
+  ): Promise<void> {
+    await userRepository.updateById(tokenPayload.userId, { isVerified: true });
+    await actionTokenRepository.deleteOneByParams({ token: dto.token });
   }
 }
 
