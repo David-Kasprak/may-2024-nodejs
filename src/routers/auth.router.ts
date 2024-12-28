@@ -4,6 +4,7 @@ import { authController } from "../controllers/auth.controller";
 import { ActionTokenTypeEnum } from "../enums/action-token-type.enum";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";
+import { AuthValidator } from "../validators/auth.validator";
 import { UserValidator } from "../validators/user.validator";
 
 const router = Router();
@@ -46,6 +47,7 @@ router.put(
 
 router.post(
   "/verify",
+  commonMiddleware.validateBody(AuthValidator.verify),
   authMiddleware.checkActionToken(ActionTokenTypeEnum.EMAIL_VERIFICATION),
   authController.verify,
 );
