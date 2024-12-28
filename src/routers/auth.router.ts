@@ -38,9 +38,13 @@ router.post(
   authController.forgotPassword,
 );
 
-router.put("/forgot-password", authController.forgotPasswordSet);
-
 router.put(
+  "/forgot-password",
+  authMiddleware.checkActionToken(ActionTokenTypeEnum.FORGOT_PASSWORD),
+  authController.forgotPasswordSet,
+);
+
+router.post(
   "/verify",
   authMiddleware.checkActionToken(ActionTokenTypeEnum.EMAIL_VERIFICATION),
   authController.verify,

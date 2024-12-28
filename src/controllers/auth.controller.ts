@@ -79,8 +79,9 @@ class AuthController {
     next: NextFunction,
   ) {
     try {
+      const tokenPayload = req.res.locals.tokenPayload as ITokenPayload;
       const dto = req.body as IForgotPasswordSet;
-      await authService.forgotPasswordSet(dto);
+      await authService.forgotPasswordSet(dto, tokenPayload);
       res.status(204);
     } catch (e) {
       next(e);
