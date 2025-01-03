@@ -1,9 +1,11 @@
+import { FilterQuery } from "mongoose";
+
 import { IOldPassword } from "../interfaces/old-password.interface";
 import { OldPassword } from "../models/old-password.model";
 
 class OldPasswordRepository {
-  public async getList(): Promise<IOldPassword[]> {
-    return await OldPassword.find();
+  public async getListByUserId(userId: string): Promise<IOldPassword[]> {
+    return await OldPassword.find({ _userId: userId });
   }
 
   public async create(dto: Partial<IOldPassword>): Promise<IOldPassword> {
@@ -11,7 +13,7 @@ class OldPasswordRepository {
   }
 
   public async deleteManyByParams(
-    params: Pick<IOldPassword, "_userId" | "createdAt">,
+    params: FilterQuery<IOldPassword>,
   ): Promise<void> {
     await OldPassword.deleteMany(params);
   }
